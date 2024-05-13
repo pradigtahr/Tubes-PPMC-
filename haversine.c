@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 
+
 #define M_PI 3.14159265358979323846
 
 // Fungsi untuk menghitung jarak antara dua titik koordinat menggunakan rumus haversine
@@ -24,19 +25,19 @@ double haversine(double lat1, double lon1, double lat2, double lon2) {
     return rad * c;
 }
 
-// Fungsi utama
-int main() {
-    double lat1 = 51.5007; // Koordinat lintang untuk titik pertama (dalam derajat)
-    double lon1 = 0.1246;  // Koordinat bujur untuk titik pertama (dalam derajat)
-    double lat2 = 40.6892; // Koordinat lintang untuk titik kedua (dalam derajat)
-    double lon2 = 74.0445; // Koordinat bujur untuk titik kedua (dalam derajat)
+// Debugging
+// int main() {
+//     double lat1 = 51.5007; // Koordinat lintang untuk titik pertama (dalam derajat)
+//     double lon1 = 0.1246;  // Koordinat bujur untuk titik pertama (dalam derajat)
+//     double lat2 = 40.6892; // Koordinat lintang untuk titik kedua (dalam derajat)
+//     double lon2 = 74.0445; // Koordinat bujur untuk titik kedua (dalam derajat)
     
-    // Memanggil fungsi haversine untuk menghitung jarak antara dua titik
-    double distance = haversine(lat1, lon1, lat2, lon2);
+//     // Memanggil fungsi haversine untuk menghitung jarak antara dua titik
+//     double distance = haversine(lat1, lon1, lat2, lon2);
     
-    // Menampilkan hasil jarak dalam kilometer
-    printf("Jarak antara kedua titik adalah: %.2f KM\n", distance);
+//     // Menampilkan hasil jarak dalam kilometer
+//     printf("Jarak antara kedua titik adalah: %.2f KM\n", distance);
 
-    return 0;
-}
+//     return 0;
+// }
 
