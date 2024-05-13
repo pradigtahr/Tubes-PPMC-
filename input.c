@@ -2,14 +2,8 @@
 #include <stdlib.h>
 #include<string.h>
 
-#define MAX_LEN_STRING 255
+#include "struct.h"
 
-typedef struct Node{
-  char nama_kota[MAX_LEN_STRING];
-  double lintang;
-  double bujur;
-  struct Node* next;
-}Node;
 
 int add(Node **head, double data_lintang, double data_bujur, char nama[]){
     Node *temp;
@@ -77,6 +71,7 @@ Node* input_file(){
     return (Linked_list_kota);
 } 
 
+/* untuk debugging
 int main(){
     Node *daftar_kota = input_file();
 
@@ -87,3 +82,4 @@ int main(){
     return(0);
 
 }
+*/
