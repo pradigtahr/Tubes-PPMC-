@@ -7,6 +7,7 @@
 #define MAX_LEN_STRING 255
 #define M_PI 3.14159265358979323846
 
+// Definisi struct Node untuk menyimpan data kota
 typedef struct Node {
     char nama_kota[MAX_LEN_STRING];
     double lintang;
@@ -14,6 +15,7 @@ typedef struct Node {
     struct Node* next;
 } Node;
 
+// Fungsi untuk menambahkan node baru ke linked list
 int add(Node **head, double data_lintang, double data_bujur, char nama[]) {
     Node *temp;
     temp = (Node*)malloc(sizeof(Node));
@@ -32,14 +34,7 @@ int add(Node **head, double data_lintang, double data_bujur, char nama[]) {
     return 0;
 }
 
-void print(Node* hasil) {
-    Node* display = hasil;
-    while (display != NULL) {
-        printf("%s \t: %f\t|| %f\n", display->nama_kota, display->lintang, display->bujur);
-        display = display->next;
-    }
-}
-
+// Fungsi untuk membaca data kota dari file dan membentuk linked list
 Node* input_file() {
     Node *Linked_list_kota = NULL;
 
@@ -61,6 +56,7 @@ Node* input_file() {
     char kota_temp[MAX_LEN_STRING];
     double lintang, bujur;
 
+    // Membaca setiap baris dari file
     while (fgets(line, MAX_LEN_STRING, stream)) {
         strcpy(tempLine, line);
         strcpy(kota_temp, strtok(tempLine, ","));
@@ -75,6 +71,7 @@ Node* input_file() {
     return Linked_list_kota;
 }
 
+// Fungsi untuk menghitung jarak Haversine antara dua titik (lintang dan bujur)
 double haversine(double lat1, double lon1, double lat2, double lon2) {
     double dLat = (lat2 - lat1) * M_PI / 180.0;
     double dLon = (lon2 - lon1) * M_PI / 180.0;
@@ -89,6 +86,7 @@ double haversine(double lat1, double lon1, double lat2, double lon2) {
     return rad * c;
 }
 
+// Fungsi rekursif DFS untuk menemukan jalur terdekat dalam masalah TSP
 void dfs(Node* cities[], int numCities, int visited[], int currPos, int count, double cost, double* minCost, double distances[numCities][numCities], int path[], int bestPath[], int startIndex) {
     if (count == numCities) {
         double returnCost = distances[currPos][startIndex];
@@ -97,7 +95,7 @@ void dfs(Node* cities[], int numCities, int visited[], int currPos, int count, d
             for (int i = 0; i < numCities; i++) {
                 bestPath[i] = path[i];
             }
-            bestPath[numCities] = startIndex; // Return to the starting city
+            bestPath[numCities] = startIndex; // Kembali ke kota awal
         }
         return;
     }
@@ -112,6 +110,7 @@ void dfs(Node* cities[], int numCities, int visited[], int currPos, int count, d
     }
 }
 
+// Fungsi untuk menemukan indeks kota berdasarkan nama kota
 int find_city_index(Node* cities[], int numCities, char* cityName) {
     for (int i = 0; i < numCities; i++) {
         if (strcmp(cities[i]->nama_kota, cityName) == 0) {
@@ -121,6 +120,7 @@ int find_city_index(Node* cities[], int numCities, char* cityName) {
     return -1;
 }
 
+// Fungsi utama
 int main(void) {
     Node *daftar_kota = input_file();
 
@@ -128,7 +128,7 @@ int main(void) {
         return -1;
     }
 
-    // Count the number of cities
+    // Menghitung jumlah kota
     int numCities = 0;
     Node *temp = daftar_kota;
     while (temp != NULL) {
@@ -136,7 +136,7 @@ int main(void) {
         temp = temp->next;
     }
 
-    // Create an array of nodes
+    // Membuat array node kota
     Node* cities[numCities];
     temp = daftar_kota;
     for (int i = 0; i < numCities; i++) {
@@ -144,7 +144,7 @@ int main(void) {
         temp = temp->next;
     }
 
-    // Create the distance matrix
+    // Membuat matriks jarak antar kota
     double distances[numCities][numCities];
     for (int i = 0; i < numCities; i++) {
         for (int j = 0; j < numCities; j++) {
@@ -156,6 +156,7 @@ int main(void) {
         }
     }
 
+    // Handling case jika kota start tidak ada
     char startingCity[MAX_LEN_STRING];
     printf("Enter starting point: ");
     scanf("%s", startingCity);
@@ -163,27 +164,30 @@ int main(void) {
     int startIndex = find_city_index(cities, numCities, startingCity);
     if (startIndex == -1) {
         printf("Starting city not found\n");
-        return -1;
+        return 0;
     }
 
+
+    // Jika ada, maka jalankan algoritma dfs dan hitung waktu eksekusi
     clock_t start_time = clock();
-    // Initialize visited array
+
+    // Inisialisasi array visited
     int visited[numCities];
     memset(visited, 0, sizeof(visited));
-    visited[startIndex] = 1; // Start from the selected city
-
-    int path[numCities + 1];  // To store the current path
-    int bestPath[numCities + 1];  // To store the best path
+    visited[startIndex] = 1; // Mulai dari kota yang dipilih
+    int path[numCities + 1];  // Untuk menyimpan jalur saat ini
+    int bestPath[numCities + 1];  // Untuk menyimpan jalur terbaik
     path[0] = startIndex;
 
-    // Start DFS to find the minimum cost
+    // Mulai DFS untuk mencari biaya minimum
     double minCost = INFINITY;
-
     dfs(cities, numCities, visited, startIndex, 1, 0, &minCost, distances, path, bestPath, startIndex);
+
+    // Hitung waktu eksekusi
     clock_t end_time = clock();
     double time_spent = (double)(end_time - start_time) / CLOCKS_PER_SEC;
 
-    // Print the best route
+    // Cetak rute terbaik
     printf("Best route found:\n");
     for (int i = 0; i <= numCities; i++) {
         printf("%s", cities[bestPath[i]]->nama_kota);
